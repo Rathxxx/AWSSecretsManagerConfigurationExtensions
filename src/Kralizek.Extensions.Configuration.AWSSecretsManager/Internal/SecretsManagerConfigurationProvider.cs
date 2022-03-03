@@ -142,9 +142,11 @@ namespace Kralizek.Extensions.Configuration.Internal
                 }
                 case JValue jValue:
                 {
-                    var value = jValue.Value.ToString();
-                    yield return (prefix, value);
-                    break;
+                    var value = jValue?.Value?.ToString();
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+                        yield return (prefix, value);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+                        break;
                 }
                 default:
                 {
@@ -217,7 +219,9 @@ namespace Kralizek.Extensions.Configuration.Internal
                     if (TryParseJson(secretString, out var jToken))
                     {
                         // [MaybeNullWhen(false)] attribute is available in .net standard since version 2.1
+#pragma warning disable CS8604 // Possible null reference argument.
                         var values = ExtractValues(jToken, secretName);
+#pragma warning restore CS8604 // Possible null reference argument.
 
                         foreach (var (key, value) in values)
                         {
